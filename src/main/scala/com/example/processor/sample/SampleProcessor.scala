@@ -2,6 +2,7 @@ package com.example.processor.sample
 
 import java.util
 
+import com.example.processor.sample.config.CardPrefixes
 import com.streamsets.datatransformer.api.spark.{SingleInputSparkTransform, SparkSessionProvider}
 import com.streamsets.pipeline.api.ConfigIssue
 import com.streamsets.pipeline.spark.SparkData
@@ -12,15 +13,7 @@ import org.apache.spark.sql.functions.{broadcast, explode, split}
   *
   *  @constructor create a new processor
   */
-class SampleProcessor extends SingleInputSparkTransform {
-  private val ccTypes = List(
-    ("Visa", "4"),
-    ("Mastercard", "51,52,53,54"),
-    ("AMEX", "34,37"),
-    ("Diners Club", "300,301,302,303,304,305,36,38"),
-    ("Discover", "6011,65"),
-    ("JCB", "2131,1800,35")
-  )
+class SampleProcessor(val inputFieldName: String, val outputFieldName: String, val ccTypes: java.util.List[CardPrefixes] ) extends SingleInputSparkTransform {
   private var ccTypeDF: DataFrame = null
 
   /**
@@ -37,7 +30,7 @@ class SampleProcessor extends SingleInputSparkTransform {
       import sparkSession.implicits._
 
       // Make a DataFrame suitable for joining with the input data
-      ccTypeDF = ccTypes.toDF("type", "prefixes")
+      ccTypeDF = sparkSession.createDataFrame(ccTypes, classOf[CardPrefixes])
           .withColumn("prefix", explode(split($"prefixes",",")))
           .drop("prefixes")
     }

@@ -248,8 +248,7 @@ Configuring the Spark Processor
 
 Now that our processor is transforming its input, there's an enhancement we can make. Right now, the mapping of credit card type to prefix is stored in the Scala code. This means that, if we want to add another prefix or type, we have to recompile the processor jar and copy it to all Transformer instances that use it. It would be much better to have the list of prefixes in the pipeline configuration.
 
-Configuration
- parameters are managed by the `SampleDProcessor` Java class. Open `SampleDProcessor.java` and add the following imports:
+Configuration parameters are managed by the `SampleDProcessor` Java class. Open `SampleDProcessor.java` and add the following imports:
 
     import com.streamsets.pipeline.api.ConfigDefBean;
     import com.example.processor.sample.config.SampleConfigBean;
@@ -380,7 +379,7 @@ Since `ccTypeDF` still has the same layout, we don't need to modify the `transfo
 
 * Set **Input Field Name** to `credit_card`
 * Set **Output Field Name** to `credit_card_type`
-* Under **Card Prefixes**, click **Switch to bulk edit mode** then paste in the following JSON:
+* Under **Card Prefixes**, click **Switch to bulk edit mode** then replace the contents with the following JSON:
 
       [
         {

@@ -2,6 +2,8 @@ package com.example.processor.sample;
 
 import com.streamsets.datatransformer.api.operator.BaseTransformOperator;
 import com.streamsets.datatransformer.api.operator.Operator;
+import com.streamsets.pipeline.api.ConfigDefBean;
+import com.example.processor.sample.config.SampleConfigBean;
 import com.streamsets.pipeline.api.ConfigGroups;
 import com.streamsets.pipeline.api.ExecutionMode;
 import com.streamsets.pipeline.api.GenerateResourceBundle;
@@ -22,9 +24,11 @@ import org.apache.spark.sql.Row;
 @HideConfigs(preconditions = true, onErrorRecord = true)
 @GenerateResourceBundle
 public class SampleDProcessor extends BaseTransformOperator<Dataset<Row>> {
+  @ConfigDefBean
+  public SampleConfigBean conf;
 
   @Override
   public Operator<Dataset<Row>> getOperator() {
-    return new SampleProcessor();
+    return new SampleProcessor(conf.inputFieldName, conf.outputFieldName, conf.cardTypes);
   }
 }
