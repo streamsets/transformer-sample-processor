@@ -433,6 +433,13 @@ Since the pipeline is, by default, configured to Streaming mode, it will simply 
 
 Note - if you make changes and rerun the pipeline, be sure to click **... > Reset Origin** so that the File origin re-reads the data; otherwise the pipeline will remember that it has already read the input file and will not reprocess it.
 
+Finally, locate the output file in the directory you configured and inspect the content. You should see JSON similar to:
+
+    $ head -n 3 /tmp/sdt/part-00000-4dcdd7d8-f084-492a-bd62-5d7ea1d64a9f-c000.json
+    {"medallion":"F6F7D02179BE915B23EF2DB57836442D","hack_license":"088879B44B80CC9ED43724776C539370","vendor_id":"VTS","payment_type":"CRD","fare_amount":12.0,"surcharge":0.5,"mta_tax":0.5,"tip_amount":1.75,"tolls_amount":0.0,"total_amount":14.75,"rate_code":1,"pickup_datetime":"2013-01-13T04:36:12.000-08:00","dropoff_datetime":"2013-01-13T04:46:12.000-08:00","passenger_count":5,"trip_time_in_secs":600,"trip_distance":3.12,"pickup_longitude":-73.996933,"pickup_latitude":40.720055,"dropoff_longitude":-73.993546,"dropoff_latitude":40.693043,"credit_card":4024007124352922,"credit_card_type":"Visa"}
+    {"medallion":"BE386D8524FCD16B3727DCF0A32D9B25","hack_license":"4EB96EC9F3A42794DEE233EC8A2616CE","vendor_id":"VTS","payment_type":"CRD","fare_amount":12.0,"surcharge":0.5,"mta_tax":0.5,"tip_amount":3.12,"tolls_amount":0.0,"total_amount":16.12,"rate_code":1,"pickup_datetime":"2013-01-13T04:37:00.000-08:00","dropoff_datetime":"2013-01-13T04:48:00.000-08:00","passenger_count":2,"trip_time_in_secs":660,"trip_distance":3.39,"pickup_longitude":-74.000313,"pickup_latitude":40.730068,"dropoff_longitude":-73.987373,"dropoff_latitude":40.768406,"credit_card":5163294842280902,"credit_card_type":"MC"}
+    {"medallion":"E9FF471F36A91031FE5B6D6228674089","hack_license":"72E0B04464AD6513F6A613AABB04E701","vendor_id":"VTS","payment_type":"CRD","fare_amount":5.5,"surcharge":0.5,"mta_tax":0.5,"tip_amount":1.2,"tolls_amount":0.0,"total_amount":7.7,"rate_code":1,"pickup_datetime":"2013-01-13T04:41:00.000-08:00","dropoff_datetime":"2013-01-13T04:45:00.000-08:00","passenger_count":1,"trip_time_in_secs":240,"trip_distance":1.16,"pickup_longitude":-73.997292,"pickup_latitude":40.720982,"dropoff_longitude":-74.000443,"dropoff_latitude":40.732376,"credit_card":4532038713619608,"credit_card_type":"Visa"}
+
 Conclusion
 ----------
 
