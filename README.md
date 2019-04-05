@@ -73,7 +73,7 @@ Here's a minimal implementation that simply returns its input as its output:
       }
     }
 
-Clone the [sample processor git repository](https://github.com/streamsets/transformer-sample-processor) and examine the above code there. You will also see a couple of supporting Java classes and a default icon for the processor. We'll look at those more closely later.
+Clone the [sample processor git repository](https://github.com/streamsets/transformer-sample-processor), checkout the `skeleton` tag, and examine the above code there. You will also see a couple of supporting Java classes and a default icon for the processor. We'll look at those more closely later.
 
 Now build the project with `mvn clean package`:
 
@@ -235,7 +235,7 @@ There are a few things to note in the new `transform()` method:
  * A left outer join is used so that incoming rows with no credit card number, or a credit card number not matching any prefix, will be included.
  * We drop the redundant `prefix` column, and rename `type` to `credit_card_type` - we will allow the user to configure the incoming and outgoing field names in the next step
 
-Your code should look like [this](https://link/tbd) when you're done.
+Your code should look like [this](https://github.com/streamsets/transformer-sample-processor/blob/lookup/src/main/scala/com/example/processor/sample/SampleProcessor.scala) when you're done.
 
 Finally, repeat the process of building the project, copying the new JAR file to the `api-lib` directory, and restarting Transformer.
 
@@ -257,6 +257,8 @@ Now add the following code, just above the `getOperator()` method's `@Override` 
 
     @ConfigDefBean
     public SampleConfigBean conf;
+
+`SampleDProcessor.java` should now look like [this](https://github.com/streamsets/transformer-sample-processor/blob/config/src/main/java/com/example/processor/sample/SampleDProcessor.java).
 
 Add a new directory, `src/main/java/com/example/transform/sample/config`, and create a new file there, `SampleConfigBean.java`. This is the content:
 
@@ -373,7 +375,7 @@ Remove the ccTypes List (leaving the `ccTypeDF` DataFrame!) and change the `crea
 
 All we're doing here is accepting the configured credit card type/prefix mappings in place of the hardcoded list, and tweaking the DataFrame creation to match.
 
-The `CustomProcessor.java` file should now look like [this](https://link/tbd).
+The `CustomProcessor.scala` file should now look like [this](https://github.com/streamsets/transformer-sample-processor/blob/config/src/main/scala/com/example/processor/sample/SampleProcessor.scala).
 
 Since `ccTypeDF` still has the same layout, we don't need to modify the `transform()` method at all. Repeat the build, copy, restart process but, before you preview the pipeline, click the Sample Processor, and select the **Sample** tab in the configuration panel.
 
