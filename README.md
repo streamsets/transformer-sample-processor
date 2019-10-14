@@ -100,7 +100,7 @@ You should see a jar file in the `target` directory:
     generated-sources         surefire-reports
     maven-archiver            test-classes
 
-Copy the jar file, `streamsets-example-processor-lib-3.9.0-SNAPSHOT.jar1` to Transformer's `api-lib`. Note - we will likely change this to `user-libs` in the future.
+Copy the jar file, `streamsets-example-processor-lib-3.9.0-SNAPSHOT.jar` to Transformer's `api-lib`. Note - we will likely change this to `user-libs` in the future.
 
 Creating a Pipeline Using a Processor
 ---------------------------------------
