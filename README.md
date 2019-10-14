@@ -10,7 +10,7 @@ This tutorial explains how to create a simple custom processor, using Java and S
 Prerequisites
 -------------
 
-* [Download](https://streamsets.com/link/tbd) and [install](https://streamsets.com/link/tbd) StreamSets Transformer.
+* [Download](https://go.streamsets.com/transformer-registration.html) and [install](https://streamsets.com/documentation/controlhub/latest/help/transformer/Installation/Installing.html#concept_es1_hyw_dhb) StreamSets Transformer.
 * Oracle [Java Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (JDK) 1.8 or later is needed to compile Java code and build JAR files.
 * [Scala](https://www.scala-lang.org/download/) version 2.10 or later.
 * [Maven](https://maven.apache.org/download.cgi) 3.3.9 or higher is needed to manage the JAR file build process.
@@ -20,7 +20,7 @@ Transformer includes the Spark libraries required to preview dataflow pipelines.
 Implementing a Skeleton Processor
 ---------------------------------
 
-The main class of the processor is written in Scala and extends the [`com.streamsets.datatransformer.api.spark.SingleInputSparkTransform`](https://streamsets.com/link/tbd) abstract class, implementing the `transform(input: SparkData): SparkData` and, optionally, `init(): util.List[ConfigIssue]` and `destroy()` methods.
+The main class of the processor is written in Scala and extends the `com.streamsets.datatransformer.api.spark.SingleInputSparkTransform` abstract class, implementing the `transform(input: SparkData): SparkData` and, optionally, `init(): util.List[ConfigIssue]` and `destroy()` methods.
 
 Here's a minimal implementation that simply returns its input as its output:
 
@@ -73,7 +73,7 @@ Here's a minimal implementation that simply returns its input as its output:
       }
     }
 
-Clone the [sample processor git repository](https://github.com/streamsets/transformer-sample-processor) and examine the above code there. You will also see a couple of supporting Java classes and a default icon for the processor. We'll look at those more closely later.
+Clone the [sample processor git repository](https://github.com/streamsets/transformer-sample-processor), checkout the `skeleton` tag, and examine the above code there. You will also see a couple of supporting Java classes and a default icon for the processor. We'll look at those more closely later.
 
 Now build the project with `mvn clean package`:
 
@@ -235,7 +235,7 @@ There are a few things to note in the new `transform()` method:
  * A left outer join is used so that incoming rows with no credit card number, or a credit card number not matching any prefix, will be included.
  * We drop the redundant `prefix` column, and rename `type` to `credit_card_type` - we will allow the user to configure the incoming and outgoing field names in the next step
 
-Your code should look like [this](https://link/tbd) when you're done.
+Your code should look like [this](https://github.com/streamsets/transformer-sample-processor/blob/lookup/src/main/scala/com/example/processor/sample/SampleProcessor.scala) when you're done.
 
 Finally, repeat the process of building the project, copying the new JAR file to the `api-lib` directory, and restarting Transformer.
 
@@ -257,6 +257,8 @@ Now add the following code, just above the `getOperator()` method's `@Override` 
 
     @ConfigDefBean
     public SampleConfigBean conf;
+
+`SampleDProcessor.java` should now look like [this](https://github.com/streamsets/transformer-sample-processor/blob/config/src/main/java/com/example/processor/sample/SampleDProcessor.java).
 
 Add a new directory, `src/main/java/com/example/transform/sample/config`, and create a new file there, `SampleConfigBean.java`. This is the content:
 
@@ -373,7 +375,7 @@ Remove the ccTypes List (leaving the `ccTypeDF` DataFrame!) and change the `crea
 
 All we're doing here is accepting the configured credit card type/prefix mappings in place of the hardcoded list, and tweaking the DataFrame creation to match.
 
-The `CustomProcessor.java` file should now look like [this](https://link/tbd).
+The `CustomProcessor.scala` file should now look like [this](https://github.com/streamsets/transformer-sample-processor/blob/config/src/main/scala/com/example/processor/sample/SampleProcessor.scala).
 
 Since `ccTypeDF` still has the same layout, we don't need to modify the `transform()` method at all. Repeat the build, copy, restart process but, before you preview the pipeline, click the Sample Processor, and select the **Sample** tab in the configuration panel.
 
@@ -430,6 +432,13 @@ Since the pipeline is, by default, configured to Streaming mode, it will simply 
 ![spark web ui](img/image_7.png)
 
 Note - if you make changes and rerun the pipeline, be sure to click **... > Reset Origin** so that the File origin re-reads the data; otherwise the pipeline will remember that it has already read the input file and will not reprocess it.
+
+Finally, locate the output file in the directory you configured and inspect the content. You should see JSON similar to:
+
+    $ head -n 3 /tmp/sdt/part-00000-4dcdd7d8-f084-492a-bd62-5d7ea1d64a9f-c000.json
+    {"medallion":"F6F7D02179BE915B23EF2DB57836442D","hack_license":"088879B44B80CC9ED43724776C539370","vendor_id":"VTS","payment_type":"CRD","fare_amount":12.0,"surcharge":0.5,"mta_tax":0.5,"tip_amount":1.75,"tolls_amount":0.0,"total_amount":14.75,"rate_code":1,"pickup_datetime":"2013-01-13T04:36:12.000-08:00","dropoff_datetime":"2013-01-13T04:46:12.000-08:00","passenger_count":5,"trip_time_in_secs":600,"trip_distance":3.12,"pickup_longitude":-73.996933,"pickup_latitude":40.720055,"dropoff_longitude":-73.993546,"dropoff_latitude":40.693043,"credit_card":4024007124352922,"credit_card_type":"Visa"}
+    {"medallion":"BE386D8524FCD16B3727DCF0A32D9B25","hack_license":"4EB96EC9F3A42794DEE233EC8A2616CE","vendor_id":"VTS","payment_type":"CRD","fare_amount":12.0,"surcharge":0.5,"mta_tax":0.5,"tip_amount":3.12,"tolls_amount":0.0,"total_amount":16.12,"rate_code":1,"pickup_datetime":"2013-01-13T04:37:00.000-08:00","dropoff_datetime":"2013-01-13T04:48:00.000-08:00","passenger_count":2,"trip_time_in_secs":660,"trip_distance":3.39,"pickup_longitude":-74.000313,"pickup_latitude":40.730068,"dropoff_longitude":-73.987373,"dropoff_latitude":40.768406,"credit_card":5163294842280902,"credit_card_type":"MC"}
+    {"medallion":"E9FF471F36A91031FE5B6D6228674089","hack_license":"72E0B04464AD6513F6A613AABB04E701","vendor_id":"VTS","payment_type":"CRD","fare_amount":5.5,"surcharge":0.5,"mta_tax":0.5,"tip_amount":1.2,"tolls_amount":0.0,"total_amount":7.7,"rate_code":1,"pickup_datetime":"2013-01-13T04:41:00.000-08:00","dropoff_datetime":"2013-01-13T04:45:00.000-08:00","passenger_count":1,"trip_time_in_secs":240,"trip_distance":1.16,"pickup_longitude":-73.997292,"pickup_latitude":40.720982,"dropoff_longitude":-74.000443,"dropoff_latitude":40.732376,"credit_card":4532038713619608,"credit_card_type":"Visa"}
 
 Conclusion
 ----------
