@@ -137,7 +137,7 @@ Extending the Sample Processor
 
 Now that we have a very basic 'do nothing' sample working, we can extend it. We'll reimplement the Jython script from the Data Collector [Taxi Transactions tutorial](https://streamsets.com/documentation/datacollector/latest/help/datacollector/UserGuide/Tutorial/Overview.html) as a processor. The script examines the value in the `credit_card` field and sets a `credit_card_type` field according to a set of [credit card issuer prefixes](https://en.wikipedia.org/wiki/Payment_card_number#Issuer_identification_number_.28IIN.29) - '4' for Visa, '51', '52', '53', '54' or '55' for Mastercard etc.
 
-Let's start with a basic implementation. Replace the imports near the top of `CustomProcessor.scala` with the following:
+Let's start with a basic implementation. Replace the imports near the top of `SampleProcessor.scala` with the following:
 
     import java.util
 
@@ -147,7 +147,7 @@ Let's start with a basic implementation. Replace the imports near the top of `Cu
     import org.apache.spark.sql.DataFrame
     import org.apache.spark.sql.functions.{broadcast, explode, split}
 
-Add the following code at the top of the `CustomProcessor` class, before the `init()` method:
+Add the following code at the top of the `SampleProcessor` class, before the `init()` method:
 
     private val ccTypes = List(
       ("Visa", "4"),
@@ -375,7 +375,7 @@ Remove the ccTypes List (leaving the `ccTypeDF` DataFrame!) and change the `crea
 
 All we're doing here is accepting the configured credit card type/prefix mappings in place of the hardcoded list, and tweaking the DataFrame creation to match.
 
-The `CustomProcessor.scala` file should now look like [this](https://github.com/streamsets/transformer-sample-processor/blob/config/src/main/scala/com/example/processor/sample/SampleProcessor.scala).
+The `SampleProcessor.scala` file should now look like [this](https://github.com/streamsets/transformer-sample-processor/blob/config/src/main/scala/com/example/processor/sample/SampleProcessor.scala).
 
 Since `ccTypeDF` still has the same layout, we don't need to modify the `transform()` method at all. Repeat the build, copy, restart process but, before you preview the pipeline, click the Sample Processor, and select the **Sample** tab in the configuration panel.
 
@@ -439,6 +439,8 @@ Finally, locate the output file in the directory you configured and inspect the 
     {"medallion":"F6F7D02179BE915B23EF2DB57836442D","hack_license":"088879B44B80CC9ED43724776C539370","vendor_id":"VTS","payment_type":"CRD","fare_amount":12.0,"surcharge":0.5,"mta_tax":0.5,"tip_amount":1.75,"tolls_amount":0.0,"total_amount":14.75,"rate_code":1,"pickup_datetime":"2013-01-13T04:36:12.000-08:00","dropoff_datetime":"2013-01-13T04:46:12.000-08:00","passenger_count":5,"trip_time_in_secs":600,"trip_distance":3.12,"pickup_longitude":-73.996933,"pickup_latitude":40.720055,"dropoff_longitude":-73.993546,"dropoff_latitude":40.693043,"credit_card":4024007124352922,"credit_card_type":"Visa"}
     {"medallion":"BE386D8524FCD16B3727DCF0A32D9B25","hack_license":"4EB96EC9F3A42794DEE233EC8A2616CE","vendor_id":"VTS","payment_type":"CRD","fare_amount":12.0,"surcharge":0.5,"mta_tax":0.5,"tip_amount":3.12,"tolls_amount":0.0,"total_amount":16.12,"rate_code":1,"pickup_datetime":"2013-01-13T04:37:00.000-08:00","dropoff_datetime":"2013-01-13T04:48:00.000-08:00","passenger_count":2,"trip_time_in_secs":660,"trip_distance":3.39,"pickup_longitude":-74.000313,"pickup_latitude":40.730068,"dropoff_longitude":-73.987373,"dropoff_latitude":40.768406,"credit_card":5163294842280902,"credit_card_type":"MC"}
     {"medallion":"E9FF471F36A91031FE5B6D6228674089","hack_license":"72E0B04464AD6513F6A613AABB04E701","vendor_id":"VTS","payment_type":"CRD","fare_amount":5.5,"surcharge":0.5,"mta_tax":0.5,"tip_amount":1.2,"tolls_amount":0.0,"total_amount":7.7,"rate_code":1,"pickup_datetime":"2013-01-13T04:41:00.000-08:00","dropoff_datetime":"2013-01-13T04:45:00.000-08:00","passenger_count":1,"trip_time_in_secs":240,"trip_distance":1.16,"pickup_longitude":-73.997292,"pickup_latitude":40.720982,"dropoff_longitude":-74.000443,"dropoff_latitude":40.732376,"credit_card":4532038713619608,"credit_card_type":"Visa"}
+
+Note the `credit_card_type` field at the end of each record.
 
 Conclusion
 ----------
