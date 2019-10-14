@@ -10,7 +10,7 @@ This tutorial explains how to create a simple custom processor, using Java and S
 Prerequisites
 -------------
 
-* [Download](https://streamsets.com/link/tbd) and [install](https://streamsets.com/link/tbd) StreamSets Transformer.
+* [Download](https://go.streamsets.com/transformer-registration.html) and [install](https://streamsets.com/documentation/controlhub/latest/help/transformer/Installation/Installing.html#concept_es1_hyw_dhb) StreamSets Transformer.
 * Oracle [Java Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (JDK) 1.8 or later is needed to compile Java code and build JAR files.
 * [Scala](https://www.scala-lang.org/download/) version 2.10 or later.
 * [Maven](https://maven.apache.org/download.cgi) 3.3.9 or higher is needed to manage the JAR file build process.
@@ -20,7 +20,7 @@ Transformer includes the Spark libraries required to preview dataflow pipelines.
 Implementing a Skeleton Processor
 ---------------------------------
 
-The main class of the processor is written in Scala and extends the [`com.streamsets.datatransformer.api.spark.SingleInputSparkTransform`](https://streamsets.com/link/tbd) abstract class, implementing the `transform(input: SparkData): SparkData` and, optionally, `init(): util.List[ConfigIssue]` and `destroy()` methods.
+The main class of the processor is written in Scala and extends the `com.streamsets.datatransformer.api.spark.SingleInputSparkTransform` abstract class, implementing the `transform(input: SparkData): SparkData` and, optionally, `init(): util.List[ConfigIssue]` and `destroy()` methods.
 
 Here's a minimal implementation that simply returns its input as its output:
 
